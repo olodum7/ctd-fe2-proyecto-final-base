@@ -37,4 +37,4 @@ const customRender = (
 export * from "@testing-library/react";
 
 // sobrescribimos el método render.
-export { customRender as crender };
+export { customRender as render };

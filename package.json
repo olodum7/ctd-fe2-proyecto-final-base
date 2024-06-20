@@ -46,6 +46,7 @@
   "devDependencies": {
     "@types/styled-components": "^5.1.34",
     "eslint": "^8.19.0",
-    "msw": "^0.42.3"
+    "msw": "^0.42.3",
+    "text-encoding": "^0.7.0"
   }
 }

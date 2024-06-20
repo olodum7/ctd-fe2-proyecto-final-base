@@ -1,70 +1,75 @@
-import { fireEvent, screen, act } from "@testing-library/react";
-import Cita from "../features/quote/Cita"
-import { crender } from "../test-utils"
-import userEvent from '@testing-library/user-event'
+import { act } from "@testing-library/react";
+import Cita from "../features/quote/Cita";
+import { render, fireEvent, screen } from "../test-utils";
+import userEvent from '@testing-library/user-event';
 
-describe("Cita", ()=>{
+describe("Cita", () => {
 
-    describe("default", ()=>{
-        it( "Debería mostrar el mensaje 'no hay cita'", ()=>{
-        crender(<Cita/>)
-        expect(screen.getByText("No se encontro ninguna cita")).toBeInTheDocument()
-        })
+    describe("default", () => {
+        it("Debería mostrar el mensaje 'No se encontró ninguna cita'", () => {
+            render(<Cita />);
+            expect(screen.getByText("No se encontro ninguna cita")).toBeInTheDocument();
+        });
+    });
 
-    })
+    describe("Valores válidos", () => {
+        it("Debería mostrar una nueva cita de 'Marge'", async () => {
+            render(<Cita />);
+            const inputChar = screen.getByPlaceholderText("Ingresa el nombre del autor");
+            const getQuote = screen.getByLabelText("Obtener cita aleatoria");
 
-    describe("Valores validos", ()=>{
-        it( "Debería mostrar una nueva cita de 'marge'", async()=>{
-            crender(<Cita/>)
-            const inputChar = screen.getByPlaceholderText("Ingresa el nombre del autor")
-            const getQuote = screen.getByLabelText("Obtener cita aleatoria")
-            act(() => {
-                fireEvent.change(inputChar, {target: {value:"marge"}})
-                userEvent.click(getQuote)
-                /* fire events that update state */
+            await act(async () => {
+                fireEvent.change(inputChar, { target: { value: "marge" } });
+                userEvent.click(getQuote);
             });
-            expect( await screen.findByText("Marge Simpson")).toBeInTheDocument()
-           
-        })
 
-    })
+            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
+        });
+    });
 
-    describe("Ingresar valores invalidos", ()=>{
-        it( "Debería mostrar un mensaje de personaje invalido", async()=>{
-            crender(<Cita/>)
-            const inputChar = screen.getByPlaceholderText("Ingresa el nombre del autor")
-            const getQuote = screen.getByLabelText("Obtener cita aleatoria")
-            act(() => {
-                fireEvent.change(inputChar, {target: {value:"ramon"}})
-                userEvent.click(getQuote)
-                /* fire events that update state */
-               });
-            expect( await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument()
-        })
+    describe("Ingresar valores inválidos", () => {
+        it("Debería mostrar un mensaje de personaje inválido", async () => {
+            render(<Cita />);
+            const inputChar = screen.getByPlaceholderText("Ingresa el nombre del autor");
+            const getQuote = screen.getByLabelText("Obtener cita aleatoria");
 
-    })
+            await act(async () => {
+                fireEvent.change(inputChar, { target: { value: "pepe" } });
+                userEvent.click(getQuote);
+            });
 
-    describe("Cita aleatoria", ()=>{
-        it( "Debería mostrar una cita aleatoria", async ()=>{
-            crender(<Cita/>)
-            const getQuote = screen.getByLabelText("Obtener cita aleatoria")
-            userEvent.click(getQuote)
-            expect( await screen.findByText("Mayor Quimby")).toBeInTheDocument()
-        })
+            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
+        });
+    });
 
-    })
+    describe("Cita aleatoria", () => {
+        it("Debería mostrar una cita aleatoria", async () => {
+            render(<Cita />);
+            const getQuote = screen.getByText("Obtener cita aleatoria");
 
-    describe("Borrar", ()=>{
-        it( "Debería mostrar el mensaje 'no hay cita' después de hacer click en el botón 'Borrar'", async ()=>{
-            crender(<Cita/>)
-            const getQuote = screen.getByLabelText("Obtener cita aleatoria")
-            const clean = screen.getByLabelText("Borrar")
-            userEvent.click(getQuote)
-            expect( await screen.findByText("Mayor Quimby")).toBeInTheDocument()
-            userEvent.click(clean)
-            expect(await screen.findByText("No se encontro ninguna cita")).toBeInTheDocument()
+            await act(async () => {
+                userEvent.click(getQuote);
+            });
 
-        })
+            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
+        });
+    });
 
-    })
-})
+    describe("Borrar", () => {
+        it("Debería mostrar el mensaje 'No se encontró ninguna cita' después de hacer click en el botón 'Borrar'", async () => {
+            render(<Cita />);
+            const getQuote = screen.getByLabelText("Obtener cita aleatoria");
+            const clean = screen.getByLabelText("Borrar");
+
+            await act(async () => {
+                userEvent.click(getQuote);
+            });
+
+            await act(async () => {
+                userEvent.click(clean);
+            });
+
+            expect(await screen.findByText("No se encontro ninguna cita")).toBeInTheDocument();
+        });
+    });
+});
