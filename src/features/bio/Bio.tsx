@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NombresSimpsons, INFO_SIMPSONS } from "./constants";
 import styles from "./styles.module.css";
+import { StyledButton } from "./styled";
 
 const Bio = () => {
   const [bioActiva, setBioActiva] = useState(
@@ -12,17 +13,13 @@ const Bio = () => {
 
   const crearBotones = () => {
     return Object.keys(INFO_SIMPSONS).map((nombre: string) => (
-      <button
+      <StyledButton
         key={nombre as string}
         onClick={() => onClick(nombre as NombresSimpsons)}
-        className={
-          bioActiva.id === nombre
-            ? styles.botonBioActivo
-            : styles.botonBioInactivo
-        }
+        isActive={bioActiva.id === nombre ? true : false}
       >
         {nombre}
-      </button>
+      </StyledButton>
     ));
   };
 
