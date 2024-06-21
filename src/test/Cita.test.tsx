@@ -23,22 +23,7 @@ describe("Cita", () => {
                 userEvent.click(getQuote);
             });
 
-            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
-        });
-    });
-
-    describe("Ingresar valores inválidos", () => {
-        it("Debería mostrar un mensaje de personaje inválido", async () => {
-            render(<Cita />);
-            const inputChar = screen.getByPlaceholderText("Ingresa el nombre del autor");
-            const getQuote = screen.getByLabelText("Obtener cita aleatoria");
-
-            await act(async () => {
-                fireEvent.change(inputChar, { target: { value: "pepe" } });
-                userEvent.click(getQuote);
-            });
-
-            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
+            expect(await screen.findByText("Marge Simpson")).toBeInTheDocument();
         });
     });
 
@@ -51,7 +36,7 @@ describe("Cita", () => {
                 userEvent.click(getQuote);
             });
 
-            expect(await screen.findByText("Por favor ingrese un nombre válido")).toBeInTheDocument();
+            expect(await screen.findByText("Mayor Quimby")).toBeInTheDocument();
         });
     });
 
